@@ -415,11 +415,9 @@ impl String {
             Value::Object(ref obj) => {
                 let obj = obj.borrow();
 
-                if obj.internal_slots().get("RegExpMatcher").is_some() {
+                if let Some(regexp) = obj.as_regexp() {
                     // first argument is another `RegExp` object, so copy its pattern and flags
-                    if let Some(body) = obj.internal_slots().get("OriginalSource") {
-                        return body.to_string();
-                    }
+                    return regexp.original_source.clone();
                 }
                 "undefined".to_string()
             }
